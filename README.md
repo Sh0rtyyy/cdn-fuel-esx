@@ -11,7 +11,6 @@ A highly in-depth fuel system for **FiveM** with support for the **QBCore Framew
 - Removed spamming debug print. 
 - Changed the way Air Fuel Zones spawn PolyZones and Props.
 - Player Job Error on load.
-- Syphoning Issue with QB-Inventory.
 
 
 <br>
@@ -32,7 +31,6 @@ A highly in-depth fuel system for **FiveM** with support for the **QBCore Framew
 - On cancel, the amount you put in will be filled.
 - Option to pay cash or with your bank.
 - Toggleable Jerry Cans via Config Options.
-- [CDN-Syphoning](https://github.com/CodineDev/cdn-syphoning) built-in via Config Options.
 - Electric Charging with a [Custom Model](https://i.imgur.com/WDxGoT6.png) & pre-configured locations.
 - [Player Owned Gas Stations](https://www.youtube.com/watch?v=3glln0S2QXo) that can be maintained by the Owner.
 - [Highly User Friendly Menus](https://i.imgur.com/f64IxpA.png) for Gas Station Owners.
@@ -51,8 +49,8 @@ Make sure you have the following dependencies, otherwise, issues most likely wil
 
 ### Dependencies:
 
-- [qb-target](https://github.com/BerkieBb/qb-target)
-- [qb-menu](https://github.com/qbcore-framework/qb-menu) **&** [qb-input](https://github.com/qbcore-framework/qb-input) **OR** [ox_lib](https://github.com/overextended/ox_lib)
+- [ox-target](https://github.com/overextended/ox_target)
+- [ox_lib](https://github.com/overextended/ox_lib)
 - [interact-sound](https://github.com/plunkettscott/interact-sound)
 - [PolyZone](https://github.com/qbcore-framework/PolyZone)
 - _Other dependencies are included in the resource._
@@ -124,209 +122,13 @@ Make sure to **ensure** this new resource as well as _cdn-fuel_ in your _server.
 <br>
 *Otherwise, navigate to Step 6 & Step 7 below, and finish installation.*
 
-### Step 6:
-***If you are using OX_Inventory, this step can be ignored.***
-<br><br>
-We will now be installing the Jerry Can & Syphoning Kit items into your server. You don't have to install either, but they are recommended additions. You can install them & disable them in the config, until you want to use them later on! 
-<br> <br>
-If you plan to not use them, you can skip this Step and Step 7!
-<br> <br>
-The first step of installing our items is to navigate to your *qb-core/shared/items.lua*.
-<br> <br>
-Once there, we will paste the following items at the bottom of our items table.
-```Lua
-	["syphoningkit"]				 = {["name"] = "syphoningkit", 					["label"] = "Syphoning Kit", 			["weight"] = 5000, 		["type"] = "item", 		["image"] = "syphoningkit.png", 		["unique"] = true, 		["useable"] = true, 	["shouldClose"] = false,   ["combinable"] = nil,   ["description"] = "A kit made to siphon gasoline from vehicles."},
-	["jerrycan"]				 	 = {["name"] = "jerrycan", 						["label"] = "Jerry Can", 				["weight"] = 15000, 	["type"] = "item", 		["image"] = "jerrycan.png", 			["unique"] = true, 		["useable"] = true, 	["shouldClose"] = false,   ["combinable"] = nil,   ["description"] = "A Jerry Can made to hold gasoline."},
-```
-**For people using inventories with built-in decay, you must add those onto the item, as it doesn't come with it!**
-<br> <br>
-You can follow this GIF to better understand how to install the items:
-<br>
-![Step4GIF](https://i.imgur.com/Oiy7X5W.gif)
-<br>
-Now, we need to format item data in our inventory. Firstly, find the *app.js* located at *inventoryname/html/js/app.js*.
-<br> <br>
-Now we will CTRL+F the following line:
-<br> 
-```js
-} else if (itemData.name == "harness") {
-```
-Once you have found this line, copy the following one line above it:
-<br> 
-```js
-        } else if (itemData.name == "syphoningkit") { // Syphoning Kit (CDN-Fuel or CDN-Syphoning!)
-            $(".item-info-title").html("<p>" + itemData.label + "</p>");
-            $(".item-info-description").html(
-                "<p>" + "A kit used to syphon gasoline from vehicles! <br><br>" + itemData.info.gasamount + " Liters Inside.</p>" +
-                "</span></p><p style=\"padding-top: .8vh;font-size:11px\"><b>Weight: </b>" + ((itemData.weight * itemData.amount) / 1000).toFixed(1) + " | <b>Amount: </b> " + itemData.amount
-            );
-        } else if (itemData.name == "jerrycan") { // Jerry Can (CDN-Fuel!)
-            $(".item-info-title").html("<p>" + itemData.label + "</p>");
-            $(".item-info-description").html(
-                "<p>" + "A Jerry Can, designed to hold fuel! <br><br>" + itemData.info.gasamount + " Liters Inside.</p>" +
-                "</span></p><p style=\"padding-top: .8vh;font-size:11px\"><b>Weight: </b>" + ((itemData.weight * itemData.amount) / 1000).toFixed(1) + " | <b>Amount: </b> " + itemData.amount
-            );
-```
-**Again, if you have decay, you must add in the options yourself!**
-<br> <br>
-*Here is a GIF to better understand how to install the "jerrycan" and "syphoningkit" in the app.js*
-<br>
-![Step4JSGIF](https://i.imgur.com/lKq9WDR.gif)
-<br> <br>
-Next, we'll add the item's images into our Inventory resource. This is a simple process.
-<br> <br> 
-Navigate to the cdn-fuel resource and follow this path: *cdn-fuel/assets/images*
-<br> <br> 
-Once there, select both images and either drag or *CTRL + X and CTRL + V* them into your inventory's image folder, usually the path is: *inventoryname/html/images/*
-<br> <br> 
-You can follow this GIF to get a better understanding:
-<br>
-![Step4ImagesGIF](https://i.imgur.com/C0uwjfX.gif)
-<br>
-
-### Step 6:
-This step is only necessary for you to be able to do the */giveitem* command or to put items in the qb-shops.
-
-Navigate to inventoryname/server/server.lua, and CTRL + F the following line:
-```Lua
-				elseif itemData["name"] == "harness" then
-					info.uses = 20
-```
-<br>
-Now we will add the following above the line below:
-
-```Lua
-				elseif itemData["name"] == "syphoningkit" then
-					info.gasamount = 0
-				elseif itemData["name"] == "jerrycan" then
-					info.gasamount = 0
-```
-
-Alternatively, watch this GIF to better understand the process:
-<br>
-![Step6 GIF](https://i.imgur.com/yrkR7cJ.gif)
-
-<br> 
-
-##### QB-Shop Setup
-
-Here are some preconfigured shop items if you wish to put them in the shop. (The Jerry Can is buyable via the Gas Pump!)
-
-```Lua
-        [10] = {
-            name = "syphoningkit",
-            price = 5000,
-            amount = 5,
-            info = { gasamount = 0 }, -- This must be included or, your item will not store fuel properly!
-            type = "item",
-            slot = 10,
-        }, -- CDN-Fuel / CDN-Syphoning
-        [11] = {
-            name = "jerrycan",
-            price = 750,
-            amount = 5,
-            info = { gasamount = 0 }, -- This must be included or, your item will not store fuel properly!
-            type = "item",
-            slot = 11,
-        }, -- CDN-Fuel
-```
-<br>
-You will most likely have to change the slot it is in for it to work properly!
-<br><br>
-
-### QB-Target Issue Fix 
-
-There is a **possible** issue with *qb-target* if you are using the *Config.GlobalVehicleOptions* or *Config.TargetBones* options. 
-<br>
-### **If you are NOT having this issue occur, do not follow the instructions below, as it could mess up other things.**
-<br>
-
-*Here is a simple fix for that issue:*
-
-<br> 
-
-Firstly, this option will have to be added to your *Config.TargetBones* under the bones you are having trouble with:
-```Lua
-            {
-				type = "client",
-				event = "cdn-fuel:client:SendMenuToServer",
-				icon = "fas fa-gas-pump",
-				label = "Insert Nozzle",
-				canInteract = function() return Allowrefuel end
-            },
-	    {
-				type = "client",
-				action = function()
-					TriggerEvent('cdn-fuel:client:electric:RefuelMenu')
-				end,
-				icon = "fas fa-bolt",
-				label = "Insert Electric Nozzle",
-				canInteract = function() return AllowElectricRefuel end
-            },
-```
-
-*Here is an example of how to add this option:*
-
-![Step5part33 QB-Target](https://i.imgur.com/UOgPJRi.png)
-<br> 
-*This is **specifically** for the "**boot**" bone, but, add it on which bone you are having trouble with.*
-
-<br>
-<br>
-
-*Next, we'll add this simple Function & Export into our QB-Target in the Functions() area:*
-
-```Lua
-local function AllowRefuel(state, electric) 
-    if state then
-		if electric then
-			AllowElectricRefuel = true
-		else
-        	Allowrefuel = true
-		end
-    else
-		if electric then
-			AllowElectricRefuel = false
-		else
-			Allowrefuel = false
-		end
-    end
-end exports('AllowRefuel', AllowRefuel)
-```
-
-<br> 
-
-
-**Example Image:**
-
-![Step5 Part 421421412](https://i.imgur.com/pwpa5Tk.png)
-
-<br> 
-
-Lastly, add the following to the top of your _init.lua_ in QB-Target:
-```
-local Allowrefuel = false
-local AllowElectricRefuel = false
-```
-**Example Image:**
-
-![Example Image](https://user-images.githubusercontent.com/95599217/209600631-31c6f6f0-67e2-46da-bf52-f35114cfb1e9.png)
-
-
-
-Now, set the *Config.FuelTargetExport* in *cdn-fuel/shared/config.lua* to **true**.
-
-<br> 
-
-![Step5 Part 1421942151251](https://i.imgur.com/InBl500.png)
-
 ## ___Recommended Snippets:___
 
 We highly recommend you add the following snippet to your engine toggle command. It will make it to where players cannot turn their vehicle on if they have no fuel! Seems pretty important to us!
 
 ##### ***Engine Toggle Snippet***
 ```Lua
--- FOR QB-VEHICLEKEYS, FUNCTION ToggleEngine();
+-- EXAMPLE FOR QB-VEHICLEKEYS, FUNCTION ToggleEngine();
 local NotifyCooldown = false
 function ToggleEngine(veh)
     if veh then
@@ -377,17 +179,11 @@ Here's a couple of videos showcasing the script in action!
 - [Main Fueling & Charging!](https://www.youtube.com/watch?v=_h-66IDs8Kw)
 - [Player Owned Gas Stations!](https://www.youtube.com/watch?v=3glln0S2QXo)
 - [Jerry Cans!](https://www.youtube.com/watch?v=M14nZTzltB0)
-- [Siphoning!](https://youtu.be/2CJjM_9hmNA)
 
 <br>
 <br>
 
 ![Codine Development Fuel Script Future Plans Banner](https://i.imgur.com/1RoBsmo.png)
-
-### Future Plans
-
-- Oil Rig Integration.
-- Send more suggestions in our discord server!
 
 <br>
 <br>
@@ -402,10 +198,5 @@ Here's a couple of videos showcasing the script in action!
 
 ### Credits:
 
-- **OX Conversion:**
-<br><br><img src="https://avatars.githubusercontent.com/u/6962192?v=4" width="25" height="25">
-**[NoobySloth](https://github.com/noobysloth)**
-for making the initial **OX** portion of the script. 
-<br><br><img src="https://avatars.githubusercontent.com/u/82969741?v=4" width="25" height="25">
-**[xViperAG](https://www.github.com/xViperAG)**
-for adding more OX functionality & support for QBox Remastered.
+- **ESX Conversion:**
+Shorty
