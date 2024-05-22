@@ -9,25 +9,22 @@ client_scripts {
     'client/fuel_cl.lua',
     'client/electric_cl.lua',
     'client/station_cl.lua',
-    'client/utils.lua'
+    'client/utils.lua',
+    'client/custom.lua'
 }
 
 server_scripts {
     'server/fuel_sv.lua',
     'server/station_sv.lua',
     'server/electric_sv.lua',
+    'server/custom.lua',
     '@oxmysql/lib/MySQL.lua',
 }
 
 shared_scripts {
     'shared/config.lua',
-    '@qb-core/shared/locale.lua',
-    -- '@ox_lib/init.lua', -- OX_Lib, only line this in if you have ox_lib and are using them.
-    'locales/en.lua', -- English Locales
-    -- 'locales/de.lua', -- German / Deutsch Locales
-    -- 'locales/fr.lua', -- French / Français Locales
-    -- 'locales/es.lua', -- Spanish / Español / Española Locales
-    -- 'locales/ee.lua', -- Estonian Locales
+    '@es_extended/imports.lua',
+    '@ox_lib/init.lua', -- OX_Lib, only line this in if you have ox_lib and are using them.
 }
 
 exports { -- Call with exports['cdn-fuel']:GetFuel or exports['cdn-fuel']:SetFuel
@@ -35,15 +32,15 @@ exports { -- Call with exports['cdn-fuel']:GetFuel or exports['cdn-fuel']:SetFue
     'SetFuel'
 }
 
+
+files {
+	'locales/en.json',
+}
 lua54 'yes'
 
 dependencies { -- Make sure these are started before cdn-fuel in your server.cfg!
-    'PolyZone',
-    'interact-sound',
+    --'interact-sound',
     -- QB-Core Functionality (Input, Target, Menu)
-    'qb-target',
-    'qb-input',
-    'qb-menu',
     -- QBox | Overextended Functionalities (Input, Progressbar, Target, Menu etc.)
     -- 'ox_lib', -- Ox Library
     -- 'ox_target',

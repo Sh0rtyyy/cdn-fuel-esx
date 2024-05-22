@@ -144,3 +144,34 @@ function IsVehicleBlacklisted(veh)
 	end
 	-- return true
 end
+
+function Notify(type, title, text, icon, time)
+    if type == "success" then
+        lib.notify({
+            title = title,
+            duration = time,
+            description = text,
+            type = "success"
+        })
+    elseif type == "inform" then
+        lib.notify({
+            title = title,
+            duration = time,
+            description = text,
+            type = "inform"
+        })
+    elseif type == "error" then
+        lib.notify({
+            title = title,
+            duration = time,
+            description = text,
+            type = "error"
+        })
+    end
+end
+
+RegisterNetEvent('cdn-fuel:notifysv')
+AddEventHandler('cdn-fuel:notifysv', function(type, title, text, icon, time)
+	print("NTF " .. type)
+    Notify(type, title, text, icon, time)
+end)
