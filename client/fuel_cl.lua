@@ -1174,7 +1174,13 @@ RegisterNetEvent('cdn-fuel:jerrycan:refuelmenu', function(itemData)
 		Notify("error", locale('fuelstation'), locale('vehicle_is_damaged'), "fas fa-search", 3000)
 		return 
 	end
-	local jerrycanamount = tonumber(itemData.metadata.cdn_fuel)
+	local jerrycanamount
+	local jerrycan = exports.ox_inventory:Search('slots', 'jerrycan')
+	for _, v in pairs(jerrycan) do
+		jerrycanamount = tonumber(v.metadata.cdn_fuel)
+	end
+	--print(json.encode(itemData.metadata))
+	--jerrycanamount = tonumber(itemData.metadata.cdn_fuel)
 	
 	
 	if holdingnozzle then
@@ -1281,8 +1287,11 @@ RegisterNetEvent('cdn-fuel:jerrycan:refuelvehicle', function(data)
 	local vehicle = GetClosestVehicle()
 	local vehfuel = math.floor(GetFuel(vehicle))
 	local maxvehrefuel = (100 - math.ceil(vehfuel))
-	local itemData = data.itemData
-	local jerrycanfuelamount = tonumber(itemData.metadata.cdn_fuel)
+	local jerrycanfuelamount
+	local jerrycan = exports.ox_inventory:Search('slots', 'jerrycan')
+	for _, v in pairs(jerrycan) do
+		jerrycanfuelamount = tonumber(v.metadata.cdn_fuel)
+	end
 	local vehicle = GetClosestVehicle()
 	local NotElectric = false
 	if Config.ElectricVehicleCharging then
@@ -1362,18 +1371,19 @@ RegisterNetEvent('cdn-fuel:jerrycan:refueljerrycan', function(data)
 	else
 		FuelPrice = (1 * Config.CostMultiplier)
 	end
-	local itemData = data.itemData
 	local jerrycanfuelamount
-	if Config.Ox.Inventory then
-		jerrycanfuelamount = tonumber(itemData.metadata.cdn_fuel)
-	else
-		jerrycanfuelamount = itemData.info.gasamount
+	local jerrycan = exports.ox_inventory:Search('slots', 'jerrycan')
+	for _, v in pairs(jerrycan) do
+		jerrycanfuelamount = tonumber(v.metadata.cdn_fuel)
 	end
 
 	local ped = PlayerPedId()
 
 	local JerryCanMaxRefuel = (Config.JerryCanCap - jerrycanfuelamount)
-	local refuel = lib.inputDialog(locale('input_select_refuel_header'), {locale('input_max_fuel_footer_1') .. JerryCanMaxRefuel .. locale('input_max_fuel_footer_2')})
+	--local refuel = lib.inputDialog(locale('input_select_refuel_header'), {locale('input_max_fuel_footer_1') .. JerryCanMaxRefuel .. locale('input_max_fuel_footer_2')})
+	local refuel = lib.inputDialog(locale('input_select_refuel_header'), {   
+        {type = 'slider', label = locale('input_max_fuel_footer_1'), description = locale('input_max_fuel_footer_2'), icon = 'jerrycan', min = 1, max = JerryCanMaxRefuel}
+    })
 	if not refuel then return end
 	local refuelAmount = tonumber(refuel[1])
 	if refuel then
