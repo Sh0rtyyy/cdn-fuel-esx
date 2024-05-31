@@ -100,6 +100,18 @@ It is highly recommended, if you plan on restarting the script at all, that you 
 
 <br>
 
+### Step 6:
+
+Copy and paste the jerrycan item to items.lua
+['jerrycan'] = {
+	label = 'Jerrycan',
+	client = {
+		event = 'cdn-fuel:jerrycan:refuelmenu',
+	}
+},
+
+<br>
+
 **Firstly**, we will move our _stream_ folder to our new resource, or existing resource. <br> <br> In this example, I have a dummy resource named _cdn-fool_.
 ![explorer_4tflJ0RowY](https://user-images.githubusercontent.com/95599217/209604683-79e18fa7-96ad-456d-b0c4-20632fb4d04c.gif)
 
