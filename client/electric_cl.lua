@@ -283,14 +283,10 @@ if Config.ElectricVehicleCharging then
         if data.purchasetype == "cash" then 
             purchasetype = "cash"
         else
-            purchasetype = RefuelPurchaseType
+            purchasetype = "bank"
         end
         if Config.FuelDebug then print("Purchase Type: "..purchasetype) end
-        if not data.purchasetype == "cash" then
-            amount = data.fuelamounttotal
-        elseif not data.fuelamounttotal then
-            amount = RefuelPossibleAmount 
-        end
+        local amount = data.fuelamounttotal
         if not HoldingElectricNozzle then return end
         amount = tonumber(amount)
         if amount < 1 then return end
@@ -420,7 +416,7 @@ if Config.ElectricVehicleCharging then
                     end
                     local curfuel = GetFuel(vehicle)
                     local finalfuel = (curfuel + fuelamount)
-                    if finalfuel > 99 and finalfuel < 100 then
+                    if finalfuel >= 99 then
                         SetFuel(vehicle, 100)
                     else
                         SetFuel(vehicle, finalfuel)
