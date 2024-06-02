@@ -1,5 +1,6 @@
 -- Variables
 local ESX = exports["es_extended"]:getSharedObject()
+lib.locale()
 
 -- Functions
 local function GlobalTax(value)
