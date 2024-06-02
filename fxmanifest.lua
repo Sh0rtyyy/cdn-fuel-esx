@@ -34,7 +34,7 @@ exports { -- Call with exports['cdn-fuel']:GetFuel or exports['cdn-fuel']:SetFue
 
 
 files {
-	'locales/en.json',
+	'locales/*.json',
 }
 lua54 'yes'
 
