@@ -1161,7 +1161,7 @@ RegisterNetEvent('cdn-fuel:client:RefuelVehicle', function(data)
 end)
 
 -- Jerry Can --
-RegisterNetEvent('cdn-fuel:jerrycan:refuelmenu', function(itemData)
+RegisterNetEvent('cdn-fuel:jerrycan:refuelmenu', function()
 	if IsPedInAnyVehicle(PlayerPedId(), false) then 
 		Notify("error", locale('fuelstation'), locale('cannot_refuel_inside'), "fas fa-search", 3000)
 		return 
@@ -1174,10 +1174,13 @@ RegisterNetEvent('cdn-fuel:jerrycan:refuelmenu', function(itemData)
 		Notify("error", locale('fuelstation'), locale('vehicle_is_damaged'), "fas fa-search", 3000)
 		return 
 	end
-	local jerrycanamount = tonumber(itemData.metadata.cdn_fuel)
-	--print(json.encode(itemData.metadata))
-	--jerrycanamount = tonumber(itemData.metadata.cdn_fuel)
-	
+	local itemData
+	local jerrycanamount
+	local jerrycan = exports.ox_inventory:Search('slots', 'jerrycan')
+	for _, v in pairs(jerrycan) do
+		jerrycanamount = tonumber(v.metadata.cdn_fuel)
+		itemData = v
+	end
 	
 	if holdingnozzle then
 		local fulltank
