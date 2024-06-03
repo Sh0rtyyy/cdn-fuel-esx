@@ -258,7 +258,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
         if Config.FuelDebug then print('Attempting to set name for Location #'..location..' to: '..newName) end
         MySQL.Async.execute('UPDATE fuel_stations SET label = ? WHERE `location` = ?', {newName, location})
         if Config.FuelDebug then print('Successfully executed the previous SQL Update!') end
-        TriggerClientEvent("cdn-fuel:notifysv", src, 'success', locale('fuelstation'), station_name_change_success .. newName .. " !", "idk", 3000)
+        TriggerClientEvent("cdn-fuel:notifysv", src, 'success', locale('fuelstation'), locale('station_name_change_success') .. newName .. " !", "idk", 3000)
         TriggerClientEvent('cdn-fuel:client:updatestationlabels', -1, location, newName)
     end)
 

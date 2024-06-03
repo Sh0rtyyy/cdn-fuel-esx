@@ -161,12 +161,28 @@ if Config.LeaveEngineRunning then
 	end)
 end
 
+local function updateGasStationLabel(location, newLabel)
+	if not location then
+		if Config.FuelDebug then print('location is nil') end
+		return
+	end
+	if not newLabel then
+		if Config.FuelDebug then print('newLabel is nil') end
+		return
+	end
+	if Config.FuelDebug then print("Changing Label for Location #" .. location .. ' to ' .. newLabel) end
+	Config.GasStations[location].label = newLabel
+end
+
+local function createBlipAtLocation(location)
+	local coords = vector3(Config.GasStations[location].pedcoords.x, Config.GasStations[location].pedcoords.y, Config.GasStations[location].pedcoords.z)
+	RemoveBlip(GasStationBlips[location])
+	GasStationBlips[location] = CreateBlip(coords, Config.GasStations[location].label)
+end
+
 if Config.ShowNearestGasStationOnly then
 	RegisterNetEvent('cdn-fuel:client:updatestationlabels', function(location, newLabel)
-		if not location then if Config.FuelDebug then print('location is nil') end return end
-		if not newLabel then if Config.FuelDebug then print('newLabel is nil') end return end
-		if Config.FuelDebug then print("Changing Label for Location #"..location..' to '..newLabel) end
-		Config.GasStations[location].label = newLabel
+		updateGasStationLabel(location, newLabel)
 	end)
 
 	CreateThread(function()
@@ -180,49 +196,38 @@ if Config.ShowNearestGasStationOnly then
 			local closest = 1000
 			local closestCoords
 			local closestLocation
-			local location = 0
-			local label = "Gas Station" -- Prevent nil just in case, set default name.
-			for _, ourCoords in pairs(Config.GasStations) do
-				location = location + 1
-				if not (location > #Config.GasStations) then -- Make sure we are not going over the amount of locations available.
-					local gasStationCoords = vector3(Config.GasStations[location].pedcoords.x, Config.GasStations[location].pedcoords.y, Config.GasStations[location].pedcoords.z)
-					local dstcheck = #(coords - gasStationCoords)
-					if dstcheck < closest then
-						closest = dstcheck
-						closestCoords = gasStationCoords
-						closestLocation = location
-						label = Config.GasStations[closestLocation].label
-					end
-				else
-					break
+			local label = "Gas Station"
+
+			for i, station in ipairs(Config.GasStations) do
+				local gasStationCoords = vector3(station.pedcoords.x, station.pedcoords.y, station.pedcoords.z)
+				local dstcheck = #(coords - gasStationCoords)
+				if dstcheck < closest then
+					closest = dstcheck
+					closestCoords = gasStationCoords
+					closestLocation = i
+					label = station.label
 				end
 			end
+
 			if DoesBlipExist(currentGasBlip) then
 				RemoveBlip(currentGasBlip)
 			end
+
 			currentGasBlip = CreateBlip(closestCoords, label)
 			Wait(10000)
 		end
 	end)
 else
 	RegisterNetEvent('cdn-fuel:client:updatestationlabels', function(location, newLabel)
-		if not location then if Config.FuelDebug then print('location is nil') end return end
-		if not newLabel then if Config.FuelDebug then print('newLabel is nil') end return end
-		if Config.FuelDebug then print("Changing Label for Location #"..location..' to '..newLabel) end
-		Config.GasStations[location].label = newLabel
-		local coords = vector3(Config.GasStations[location].pedcoords.x, Config.GasStations[location].pedcoords.y, Config.GasStations[location].pedcoords.z)
-		RemoveBlip(GasStationBlips[location])
-		GasStationBlips[location] = CreateBlip(coords, Config.GasStations[location].label)
+		updateGasStationLabel(location, newLabel)
+		createBlipAtLocation(location)
 	end)
 
 	CreateThread(function()
 		TriggerServerEvent('cdn-fuel:server:updatelocationlabels')
 		Wait(1000)
-		local gasStationCoords
-		for i = 1, #Config.GasStations, 1 do
-			local location = i
-			gasStationCoords = vector3(Config.GasStations[location].pedcoords.x, Config.GasStations[location].pedcoords.y, Config.GasStations[location].pedcoords.z)
-			GasStationBlips[location] = CreateBlip(gasStationCoords, Config.GasStations[location].label)
+		for i, station in ipairs(Config.GasStations) do
+			createBlipAtLocation(i)
 		end
 	end)
 end

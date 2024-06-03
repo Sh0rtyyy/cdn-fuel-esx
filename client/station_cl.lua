@@ -574,7 +574,7 @@ if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stat
 
     RegisterNetEvent('cdn-fuel:stations:client:changestationname', function() -- Menu for changing the label of the owned station.
         CanOpen = false
-        local result = lib.callback.await('cdn-fuel:server:isowner', false, location)
+        local result = lib.callback.await('cdn-fuel:server:isowner', false, CurrentLocation)
         local CitizenID = lib.callback('cdn-fuel:requestIdentifier')
         if result then
             if Config.FuelDebug then print("The Location: "..CurrentLocation.." is owned by ID: "..CitizenID) end
