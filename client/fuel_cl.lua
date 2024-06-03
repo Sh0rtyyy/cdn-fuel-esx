@@ -1174,11 +1174,7 @@ RegisterNetEvent('cdn-fuel:jerrycan:refuelmenu', function(itemData)
 		Notify("error", locale('fuelstation'), locale('vehicle_is_damaged'), "fas fa-search", 3000)
 		return 
 	end
-	local jerrycanamount
-	local jerrycan = exports.ox_inventory:Search('slots', 'jerrycan')
-	for _, v in pairs(jerrycan) do
-		jerrycanamount = tonumber(v.metadata.cdn_fuel)
-	end
+	local jerrycanamount = tonumber(itemData.metadata.cdn_fuel)
 	--print(json.encode(itemData.metadata))
 	--jerrycanamount = tonumber(itemData.metadata.cdn_fuel)
 	
@@ -1287,11 +1283,8 @@ RegisterNetEvent('cdn-fuel:jerrycan:refuelvehicle', function(data)
 	local vehicle = GetClosestVehicle()
 	local vehfuel = math.floor(GetFuel(vehicle))
 	local maxvehrefuel = (100 - math.ceil(vehfuel))
-	local jerrycanfuelamount
-	local jerrycan = exports.ox_inventory:Search('slots', 'jerrycan')
-	for _, v in pairs(jerrycan) do
-		jerrycanfuelamount = tonumber(v.metadata.cdn_fuel)
-	end
+	local itemData = data.itemData
+	local jerrycanfuelamount = tonumber(itemData.metadata.cdn_fuel)
 	local vehicle = GetClosestVehicle()
 	local NotElectric = false
 	if Config.ElectricVehicleCharging then
@@ -1371,11 +1364,8 @@ RegisterNetEvent('cdn-fuel:jerrycan:refueljerrycan', function(data)
 	else
 		FuelPrice = (1 * Config.CostMultiplier)
 	end
-	local jerrycanfuelamount
-	local jerrycan = exports.ox_inventory:Search('slots', 'jerrycan')
-	for _, v in pairs(jerrycan) do
-		jerrycanfuelamount = tonumber(v.metadata.cdn_fuel)
-	end
+	local itemData = data.itemData
+	local jerrycanfuelamount = itemData.metadata.cdn_fuel
 
 	local ped = PlayerPedId()
 
