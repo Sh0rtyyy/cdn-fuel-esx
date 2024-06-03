@@ -1,6 +1,6 @@
 if Config.PlayerOwnedGasStationsEnabled then -- This is so Player Owned Gas Stations are a Config Option, instead of forced. Set this option in shared/config.lua!
     -- Variables
-    local ESX = exports["es_extended"]:getSharedObject()
+    ESX = exports["es_extended"]:getSharedObject()
     local PedsSpawned = false
 
     -- These are for fuel pickup:

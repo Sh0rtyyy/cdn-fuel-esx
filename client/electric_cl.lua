@@ -2,7 +2,7 @@ lib.locale()
 
 if Config.ElectricVehicleCharging then
     -- Variables   
-    local ESX = exports["es_extended"]:getSharedObject()
+    ESX = exports["es_extended"]:getSharedObject()
     local HoldingElectricNozzle = false
     local RefuelPossible = false
     local RefuelPossibleAmount = 0 
