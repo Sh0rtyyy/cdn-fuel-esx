@@ -1,3 +1,5 @@
+ESX = exports["es_extended"]:getSharedObject()
+
 lib.callback.register('cdn-fuel:getmoney', function()
     local src = source
 
