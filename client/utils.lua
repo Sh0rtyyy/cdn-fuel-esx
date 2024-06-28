@@ -172,6 +172,5 @@ end
 
 RegisterNetEvent('cdn-fuel:notifysv')
 AddEventHandler('cdn-fuel:notifysv', function(type, title, text, icon, time)
-	print("NTF " .. type)
     Notify(type, title, text, icon, time)
 end)
