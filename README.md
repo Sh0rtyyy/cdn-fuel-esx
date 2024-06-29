@@ -1,16 +1,13 @@
 ![Codine Development Fuel Script Banner](https://i.imgur.com/qVOMMvW.png)
 
-# _CDN-Fuel (2.1.9)_ 
+# _CDN-Fuel (2.2.3)_ 
 
-A highly in-depth fuel system for **FiveM** with support for the **QBCore Framework & QBox Remastered**.
+A highly in-depth fuel system for **FiveM** with support for the **ESX**.
 
 # _Lastest Patch Information_
 
 *Fixes:*
-- Jerry Cans not refuelling at pump.
-- Removed spamming debug print. 
-- Changed the way Air Fuel Zones spawn PolyZones and Props.
-- Player Job Error on load.
+- General Fixes
 
 
 <br>
